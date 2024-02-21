@@ -2,7 +2,8 @@ use std::path::Path;
 
 use crate::infrastructure::extractor::extract_first_content_from_text::extract_first_content_from_text;
 use crate::infrastructure::extractor::extract_schedule::find_schedule;
-use crate::infrastructure::extractor::extract_title_and_name::extract_title_and_name;
+use crate::infrastructure::extractor::extract_speaker::find_speaker;
+use crate::infrastructure::extractor::extract_title::find_title;
 use crate::infrastructure::extractor::extract_track::find_track;
 use crate::infrastructure::reader::read_html::read_html;
 use crate::infrastructure::writer::write_json_from_proposal::write_json_from_proposal;
@@ -10,7 +11,6 @@ use crate::presentation::terminal_message_presenter::ConsoleMessager;
 use crate::presentation::terminal_message_presenter::MessageType;
 
 use crate::domain::proposal::proposal_model::ProposalModel;
-use crate::infrastructure::types::title_and_speaker::ProposalTitleAndSpeaker;
 
 pub fn build_structured_proposal_information() -> ProposalModel {
     let error_message = ConsoleMessager::new(
@@ -46,24 +46,24 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     if !is_title_tag_found {
         panic!("{}", error_message.supply_message());
     };
-    let proposal_title_and_speaker: ProposalTitleAndSpeaker =
-        extract_title_and_name(&html_text).unwrap();
+    let title = find_title(&html_text).unwrap();
+    let speaker = find_speaker(&html_text).unwrap();
 
     /*
      * Extract schedule div content from html
      */
     let schedule: String = find_schedule(&html_text).unwrap_or_else(|| "未定".to_string());
 
-    let track_name: String = find_track(&html_text).unwrap_or_else(|| "未定".to_string());
+    let track: String = find_track(&html_text).unwrap_or_else(|| "未定".to_string());
 
     /*
      * create structured data from above results
      */
     let proposal = ProposalModel {
-        title: proposal_title_and_speaker.title,
+        title,
         date: schedule,
-        track: track_name,
-        speaker: proposal_title_and_speaker.name,
+        track,
+        speaker,
         image_url: image_url.unwrap(),
     };
 
