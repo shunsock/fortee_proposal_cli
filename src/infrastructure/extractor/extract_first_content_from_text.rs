@@ -5,6 +5,6 @@ pub fn extract_first_content_from_text(html_content: &str, pattern: &str) -> Opt
     let re = Regex::new(pattern).unwrap();
 
     // search for the first match in the given text
-    re.find(html_content) // Find the first match in the given text
-        .map(|mat| mat.as_str().to_string()) // Convert the match to a String if found
+    re.captures(html_content)
+        .and_then(|cap| cap.get(1).map(|match_| match_.as_str().to_string()))
 }

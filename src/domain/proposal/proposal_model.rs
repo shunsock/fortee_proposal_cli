@@ -6,8 +6,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ProposalModel {
     pub(crate) title: String,
-    pub(crate) date: String,
+    pub(crate) schedule: String,
     pub(crate) track: String,
     pub(crate) speaker: String,
-    pub(crate) image_url: String,
+    pub(crate) og_image_url: String,
 }

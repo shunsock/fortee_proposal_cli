@@ -1,6 +1,6 @@
 use colored::Colorize;
 
-pub struct ConsoleMessager {
+pub struct ConsoleMessenger {
     pub(crate) message: String,
     pub(crate) message_type: MessageType,
 }
@@ -11,9 +11,9 @@ pub enum MessageType {
     Success,
 }
 
-impl ConsoleMessager {
-    pub fn new(message: String, message_type: MessageType) -> ConsoleMessager {
-        ConsoleMessager {
+impl ConsoleMessenger {
+    pub fn new(message: String, message_type: MessageType) -> ConsoleMessenger {
+        ConsoleMessenger {
             message,
             message_type,
         }

@@ -1,19 +1,19 @@
 use std::path::Path;
 
-use crate::infrastructure::extractor::extract_first_content_from_text::extract_first_content_from_text;
+use crate::infrastructure::extractor::extract_og_image_url::find_og_image_url;
 use crate::infrastructure::extractor::extract_schedule::find_schedule;
 use crate::infrastructure::extractor::extract_speaker::find_speaker;
 use crate::infrastructure::extractor::extract_title::find_title;
 use crate::infrastructure::extractor::extract_track::find_track;
 use crate::infrastructure::reader::read_html::read_html;
 use crate::infrastructure::writer::write_json_from_proposal::write_json_from_proposal;
-use crate::presentation::terminal_message_presenter::ConsoleMessager;
+use crate::presentation::terminal_message_presenter::ConsoleMessenger;
 use crate::presentation::terminal_message_presenter::MessageType;
 
 use crate::domain::proposal::proposal_model::ProposalModel;
 
 pub fn build_structured_proposal_information() -> ProposalModel {
-    let error_message = ConsoleMessager::new(
+    let error_message = ConsoleMessenger::new(
         "Failed to get structured information from the HTML file".to_string(),
         MessageType::Failed,
     );
@@ -24,47 +24,25 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     let html_text = read_html().unwrap_or_else(|_| panic!("{}", error_message.supply_message()));
 
     /*
-     * extract og-image url from html
-     */
-    let pattern = r#"https://fortee.jp/.+/proposal/og-image/[^"]+"#;
-    let image_url = extract_first_content_from_text(&html_text, pattern);
-
-    let is_image_found: bool = image_url.is_some();
-    if !is_image_found {
-        panic!("{}", error_message.supply_message());
-    }
-
-    /*
      * extract title and speaker from html
      * 1. search html title tag which include information by regex
      * 2. extract title and speaker by regex
      */
-    let pattern = r#"<title>.+(トーク).+fortee.jp</title>"#;
-    let title_tag = extract_first_content_from_text(&html_text, pattern);
-
-    let is_title_tag_found: bool = title_tag.is_some();
-    if !is_title_tag_found {
-        panic!("{}", error_message.supply_message());
-    };
-    let title = find_title(&html_text).unwrap();
-    let speaker = find_speaker(&html_text).unwrap();
-
-    /*
-     * Extract schedule div content from html
-     */
-    let schedule: String = find_schedule(&html_text).unwrap_or_else(|| "未定".to_string());
-
-    let track: String = find_track(&html_text).unwrap_or_else(|| "未定".to_string());
+    let title: String = find_title(&html_text);
+    let speaker: String = find_speaker(&html_text);
+    let schedule: String = find_schedule(&html_text);
+    let track: String = find_track(&html_text);
+    let og_image_url = find_og_image_url(&html_text);
 
     /*
      * create structured data from above results
      */
     let proposal = ProposalModel {
         title,
-        date: schedule,
+        schedule,
         track,
         speaker,
-        image_url: image_url.unwrap(),
+        og_image_url,
     };
 
     let file_path = Path::new("data/proposal/proposal.json");

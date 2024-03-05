@@ -1,9 +1,9 @@
 use crate::infrastructure::writer::write_image_from_bytes::write_image_from_bytes;
-use crate::presentation::terminal_message_presenter::ConsoleMessager;
+use crate::presentation::terminal_message_presenter::ConsoleMessenger;
 use crate::presentation::terminal_message_presenter::MessageType;
 
 pub fn download_og_image(url: &str, file_base_name: &str) -> String {
-    let error_message = ConsoleMessager::new(
+    let error_message = ConsoleMessenger::new(
         "Failed to download image data".to_string(),
         MessageType::Failed,
     );
