@@ -34,10 +34,19 @@ pub fn get_proposal_data_controller(url: &str) {
     /*
      * Download OG image from the structured information
      */
-    let image_path = download_og_image(&proposal.og_image_url, &proposal.title);
+    let image_path = download_og_image(&proposal.og_image_url, "og_image");
     let og_image_message = ConsoleMessenger::new(
-        format!("OG Image is saved: `{}`", image_path),
+        format!("OG Image is saved!: `{}`", image_path),
         MessageType::Warning,
     );
     og_image_message.show_message();
+
+    let show_how_to_get_image = ConsoleMessenger::new(
+        format!(
+            "you can get data by running: cp `{}` path/your/directory",
+            image_path
+        ),
+        MessageType::Notice,
+    );
+    show_how_to_get_image.show_message();
 }

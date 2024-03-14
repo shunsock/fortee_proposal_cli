@@ -13,30 +13,18 @@ use controller::get_proposal_data_controller::get_proposal_data_controller;
 use clap::Parser;
 
 #[derive(Parser)]
-#[command(author, version, about, long_about = None)]
-struct Cli {
-    #[command(subcommand)]
-    command: Option<Commands>,
-
+#[command(name = "fortee-cli")]
+#[command(version = "0.01")]
+#[command(about = "Fortee CLI Tool")]
+#[command(long_about = "Get structured information from the proposal page of the Fortee.")]
+struct Args {
+    /// URL of the proposal page
     #[arg(short, long)]
     url: String,
 }
 
-#[derive(Parser, Debug)]
-enum Commands {
-    #[command(about = "Fetch the proposal page from the given url")]
-    Fetch,
-}
-
 fn main() {
-    let cli = Cli::parse();
+    let args = Args::parse();
 
-    match &cli.command {
-        Some(Commands::Fetch) => {
-            get_proposal_data_controller(&cli.url);
-        }
-        None => {
-            println!("No command provided. Exiting...");
-        }
-    }
+    get_proposal_data_controller(&args.url);
 }
