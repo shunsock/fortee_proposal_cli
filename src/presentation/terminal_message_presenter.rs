@@ -9,6 +9,7 @@ pub enum MessageType {
     Failed,
     Warning,
     Success,
+    Notice,
 }
 
 impl ConsoleMessenger {
@@ -30,6 +31,9 @@ impl ConsoleMessenger {
             MessageType::Warning => {
                 println!("{} {}", "[warning]".yellow(), self.message);
             }
+            MessageType::Notice => {
+                println!("{} {}", "[notice]".cyan(), self.message);
+            }
         }
     }
 
@@ -43,6 +47,9 @@ impl ConsoleMessenger {
             }
             MessageType::Warning => {
                 format!("{} {}", "[warning]".yellow(), self.message)
+            }
+            MessageType::Notice => {
+                format!("{} {}", "[notice]".cyan(), self.message)
             }
         }
     }
