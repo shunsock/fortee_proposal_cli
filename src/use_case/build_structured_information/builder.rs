@@ -45,7 +45,7 @@ pub fn build_structured_proposal_information() -> ProposalModel {
         og_image_url,
     };
 
-    let file_path = Path::new("data/proposal/proposal.json");
+    let file_path = Path::new("data/json/proposal.json");
     write_json_from_proposal(&proposal, file_path)
         .unwrap_or_else(|_| panic!("{}", error_message.supply_message()));
 

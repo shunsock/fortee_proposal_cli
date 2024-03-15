@@ -28,7 +28,7 @@ pub fn download_og_image(url: &str, file_base_name: &str) -> String {
         .unwrap_or_else(|_| panic!("{}", error_message.supply_message()));
 
     // location to save
-    let save_file_path = show_file_path(file_base_name, file_extension, "data/proposal/image");
+    let save_file_path = show_file_path(file_base_name, file_extension, "data/image");
 
     write_image_from_bytes(&save_file_path, buffer);
 
