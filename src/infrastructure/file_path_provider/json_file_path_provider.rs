@@ -2,7 +2,7 @@ use super::file_path_provider_trait::FilePathProviderTrait;
 use super::get_file_path::get_file_path;
 use std::path::PathBuf;
 
-struct JsonFilePathProvider {
+pub(crate) struct JsonFilePathProvider {
     directory_name: String,
     file_base_name: String,
     extension: String,
