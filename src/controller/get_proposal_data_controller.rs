@@ -45,7 +45,7 @@ pub fn get_proposal_data_controller(url: &str) {
 
     let og_image_message = ConsoleMessenger::new(
         format!("OG Image is saved!: `{}`", image_path.to_string_lossy()),
-        MessageType::Warning,
+        MessageType::Notice,
     );
     og_image_message.show_message();
 
