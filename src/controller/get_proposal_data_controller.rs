@@ -35,8 +35,16 @@ pub fn get_proposal_data_controller(url: &str) {
      * Download OG image from the structured information
      */
     let image_path = download_og_image(&proposal.og_image_url, "og_image");
+    let image_path = match image_path {
+        Ok(image_path) => image_path,
+        Err(console_messenger) => {
+            console_messenger.show_message();
+            return;
+        }
+    };
+
     let og_image_message = ConsoleMessenger::new(
-        format!("OG Image is saved!: `{}`", image_path),
+        format!("OG Image is saved!: `{}`", image_path.to_string_lossy()),
         MessageType::Warning,
     );
     og_image_message.show_message();
@@ -44,7 +52,7 @@ pub fn get_proposal_data_controller(url: &str) {
     let show_how_to_get_image = ConsoleMessenger::new(
         format!(
             "you can get data by running: cp `{}` path/your/directory",
-            image_path
+            image_path.to_string_lossy()
         ),
         MessageType::Notice,
     );

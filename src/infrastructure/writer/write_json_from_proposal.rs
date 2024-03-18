@@ -1,11 +1,11 @@
 use std::fs::File;
 use std::io;
 use std::io::Write;
-use std::path::Path;
+use std::path::PathBuf;
 
 use crate::domain::proposal::proposal_model::ProposalModel;
 
-pub fn write_json_from_proposal(proposal: &ProposalModel, file_path: &Path) -> io::Result<()> {
+pub fn write_json_from_proposal(proposal: &ProposalModel, file_path: PathBuf) -> io::Result<()> {
     // Serialize the proposal struct to a JSON string
     let serialized = serde_json::to_string(proposal).expect("Failed to serialize proposal");
 

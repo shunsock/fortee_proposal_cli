@@ -1,4 +1,5 @@
-use std::path::Path;
+use std::env;
+use std::path::PathBuf;
 
 use crate::infrastructure::extractor::extract_og_image_url::find_og_image_url;
 use crate::infrastructure::extractor::extract_schedule::find_schedule;
@@ -21,7 +22,12 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     /*
      * read html data in local
      */
-    let html_text = read_html().unwrap_or_else(|_| panic!("{}", error_message.supply_message()));
+    let html_path = PathBuf::from(env::var("HOME").expect("HOME directory not found"))
+        .join(".fortee")
+        .join("html")
+        .join("proposal.html");
+    let html_text =
+        read_html(html_path).unwrap_or_else(|_| panic!("{}", error_message.supply_message()));
 
     /*
      * extract title and speaker from html
@@ -45,7 +51,14 @@ pub fn build_structured_proposal_information() -> ProposalModel {
         og_image_url,
     };
 
-    let file_path = Path::new("data/json/proposal.json");
+    /*
+     * write structured data to json file
+     */
+    let home_dir = env::var("HOME").expect("HOME directory not found");
+    let file_path = PathBuf::from(home_dir)
+        .join(".fortee")
+        .join("json")
+        .join("proposal.json");
     write_json_from_proposal(&proposal, file_path)
         .unwrap_or_else(|_| panic!("{}", error_message.supply_message()));
 
