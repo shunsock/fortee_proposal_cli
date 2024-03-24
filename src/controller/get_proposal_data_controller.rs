@@ -35,8 +35,11 @@ pub fn get_proposal_data_controller(url: &str) {
     let image_path = download_og_image(&proposal.og_image_url, "og_image");
     let image_path = match image_path {
         Ok(image_path) => image_path,
-        Err(console_messenger) => {
-            console_messenger.show_message();
+        Err(_) => {
+            send_message_to_console(
+                RunningStatus::Failed,
+                "Failed to download OG Image. Please check the URL.",
+            );
             return;
         }
     };

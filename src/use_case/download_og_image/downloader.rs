@@ -2,16 +2,11 @@ use crate::infrastructure::fetcher::fetch_og_image::fetch_og_image;
 use crate::infrastructure::file_path_provider::file_path_provider_trait::FilePathProviderTrait;
 use crate::infrastructure::file_path_provider::image_file_path_provider::ImageFilePathProvider;
 use crate::infrastructure::writer::write_image_from_bytes::write_image_from_bytes;
-use crate::presentation::terminal_message_presenter::ConsoleMessenger;
-use crate::presentation::terminal_message_presenter::MessageType;
+use crate::presentation::send_message::send_message_as_string;
+use crate::presentation::send_message::RunningStatus;
 use std::path::PathBuf;
 
-pub fn download_og_image(url: &str, file_base_name: &str) -> Result<PathBuf, ConsoleMessenger> {
-    let error_message = ConsoleMessenger::new(
-        "Failed to download image data".to_string(),
-        MessageType::Failed,
-    );
-
+pub fn download_og_image(url: &str, file_base_name: &str) -> Result<PathBuf, String> {
     let image_fetcher_result = fetch_og_image(url);
 
     match image_fetcher_result {
@@ -27,6 +22,9 @@ pub fn download_og_image(url: &str, file_base_name: &str) -> Result<PathBuf, Con
 
             Ok(saved_file_path)
         }
-        Err(_) => Err(error_message),
+        Err(_) => Err(send_message_as_string(
+            RunningStatus::Failed,
+            "Failed to fetch image",
+        )),
     }
 }
