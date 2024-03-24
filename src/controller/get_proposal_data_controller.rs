@@ -1,5 +1,5 @@
 use crate::presentation::pretty_json_presenter::print_pretty_json;
-use crate::presentation::send_message::send_message;
+use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
 use crate::use_case::build_structured_information::builder::build_structured_proposal_information;
 use crate::use_case::download_html_page::downloader::download_html_page;
@@ -10,7 +10,7 @@ pub fn get_proposal_data_controller(url: &str) {
      * Download HTML page from the given URL
      */
     download_html_page(url);
-    send_message(
+    send_message_to_console(
         RunningStatus::Success,
         "HTML page has been successfully downloaded.",
     );
@@ -19,7 +19,7 @@ pub fn get_proposal_data_controller(url: &str) {
      * Extract structured information from the downloaded HTML page
      */
     let proposal = build_structured_proposal_information();
-    send_message(
+    send_message_to_console(
         RunningStatus::Success,
         "Structured proposal information has been successfully created.",
     );
@@ -35,12 +35,15 @@ pub fn get_proposal_data_controller(url: &str) {
     let image_path = download_og_image(&proposal.og_image_url, "og_image");
     let image_path = match image_path {
         Ok(image_path) => image_path,
-        Err(console_messenger) => {
-            console_messenger.show_message();
+        Err(_) => {
+            send_message_to_console(
+                RunningStatus::Failed,
+                "Failed to download OG Image. Please check the URL.",
+            );
             return;
         }
     };
-    send_message(
+    send_message_to_console(
         RunningStatus::Success,
         "OG Image has been successfully downloaded.",
     );
@@ -48,7 +51,7 @@ pub fn get_proposal_data_controller(url: &str) {
     /*
      * Show how to get the downloaded image for users
      */
-    send_message(
+    send_message_to_console(
         RunningStatus::Notice,
         format!(
             "you can get data by running: cp `{}` path/your/directory",
