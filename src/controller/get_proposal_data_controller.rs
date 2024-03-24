@@ -1,4 +1,3 @@
-use crate::presentation::pretty_json_presenter::print_pretty_json;
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
 use crate::use_case::build_structured_information::builder::build_structured_proposal_information;
@@ -27,7 +26,7 @@ pub fn get_proposal_data_controller(url: &str) {
     /*
      * Print the structured information
      */
-    print_pretty_json(&proposal);
+    proposal.print();
 
     /*
      * Download OG image from the structured information

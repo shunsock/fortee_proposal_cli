@@ -41,13 +41,7 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     /*
      * create structured data from above results
      */
-    let proposal = ProposalModel {
-        title,
-        schedule,
-        track,
-        speaker,
-        og_image_url,
-    };
+    let proposal = ProposalModel::new(title, schedule, track, speaker, og_image_url);
 
     send_message_to_console(
         RunningStatus::Success,
