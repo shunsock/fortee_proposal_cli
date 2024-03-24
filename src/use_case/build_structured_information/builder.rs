@@ -11,6 +11,8 @@ use crate::infrastructure::reader::read_html::read_html;
 use crate::infrastructure::writer::write_json_from_proposal::write_json_from_proposal;
 use crate::presentation::terminal_message_presenter::ConsoleMessenger;
 use crate::presentation::terminal_message_presenter::MessageType;
+use crate::presentation::send_message::RunningStatus;
+use crate::presentation::send_message::send_message;
 
 pub fn build_structured_proposal_information() -> ProposalModel {
     let error_message = ConsoleMessenger::new(
@@ -24,8 +26,11 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     let html_path_provider = HtmlFilePathProvider::new("proposal");
     let html_path = html_path_provider.get_path();
 
-    let html_text =
-        read_html(html_path).unwrap_or_else(|_| panic!("{}", error_message.supply_message()));
+    let html_text = read_html(html_path)
+        .unwrap_or_else(|_| panic!(
+            "{}",
+            error_message.supply_message()
+        ));
 
     /*
      * extract title and speaker from html
@@ -48,6 +53,11 @@ pub fn build_structured_proposal_information() -> ProposalModel {
         speaker,
         og_image_url,
     };
+    
+    send_message(
+        RunningStatus::Success,
+        "Successfully get structured information from the HTML file"
+    );
 
     /*
      * write structured data to json file

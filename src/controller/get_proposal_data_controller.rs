@@ -1,6 +1,6 @@
 use crate::presentation::pretty_json_presenter::print_pretty_json;
-use crate::presentation::terminal_message_presenter::ConsoleMessenger;
-use crate::presentation::terminal_message_presenter::MessageType;
+use crate::presentation::send_message::send_message;
+use crate::presentation::send_message::RunningStatus;
 use crate::use_case::build_structured_information::builder::build_structured_proposal_information;
 use crate::use_case::download_html_page::downloader::download_html_page;
 use crate::use_case::download_og_image::downloader::download_og_image;
@@ -10,21 +10,19 @@ pub fn get_proposal_data_controller(url: &str) {
      * Download HTML page from the given URL
      */
     download_html_page(url);
-    let success_to_download_html_message = ConsoleMessenger::new(
-        "HTML page has been successfully downloaded.".to_string(),
-        MessageType::Success,
+    send_message(
+        RunningStatus::Success,
+        "HTML page has been successfully downloaded.",
     );
-    success_to_download_html_message.show_message();
 
     /*
      * Extract structured information from the downloaded HTML page
      */
     let proposal = build_structured_proposal_information();
-    let success_to_get_information_message = ConsoleMessenger::new(
-        "Structured proposal information has been successfully created.".to_string(),
-        MessageType::Success,
+    send_message(
+        RunningStatus::Success,
+        "Structured proposal information has been successfully created.",
     );
-    success_to_get_information_message.show_message();
 
     /*
      * Print the structured information
@@ -42,19 +40,20 @@ pub fn get_proposal_data_controller(url: &str) {
             return;
         }
     };
-
-    let og_image_message = ConsoleMessenger::new(
-        format!("OG Image is saved!: `{}`", image_path.to_string_lossy()),
-        MessageType::Notice,
+    send_message(
+        RunningStatus::Success,
+        "OG Image has been successfully downloaded.",
     );
-    og_image_message.show_message();
 
-    let show_how_to_get_image = ConsoleMessenger::new(
+    /*
+     * Show how to get the downloaded image for users
+     */
+    send_message(
+        RunningStatus::Notice,
         format!(
             "you can get data by running: cp `{}` path/your/directory",
             image_path.to_string_lossy()
-        ),
-        MessageType::Notice,
+        )
+        .as_str(),
     );
-    show_how_to_get_image.show_message();
 }
