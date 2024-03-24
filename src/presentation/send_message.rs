@@ -4,7 +4,6 @@ pub enum RunningStatus {
     Failed,
     Notice,
     Success,
-    Warning,
 }
 
 pub fn send_message_to_console(status: RunningStatus, message: &str) {
@@ -17,9 +16,6 @@ pub fn send_message_to_console(status: RunningStatus, message: &str) {
         }
         RunningStatus::Success => {
             println!("{} {}", "[success]".green(), message);
-        }
-        RunningStatus::Warning => {
-            println!("{} {}", "[warning]".yellow(), message);
         }
     }
 }
@@ -34,9 +30,6 @@ pub fn send_message_as_string(status: RunningStatus, message: &str) -> String {
         }
         RunningStatus::Success => {
             format!("{} {}", "[success]".green(), message)
-        }
-        RunningStatus::Warning => {
-            format!("{} {}", "[warning]".yellow(), message)
         }
     }
 }
@@ -53,7 +46,6 @@ mod tests {
         send_message_to_console(RunningStatus::Failed, "failed message");
         send_message_to_console(RunningStatus::Notice, "notice message");
         send_message_to_console(RunningStatus::Success, "success message");
-        send_message_to_console(RunningStatus::Warning, "warning message");
     }
 
     #[test]
@@ -64,6 +56,5 @@ mod tests {
         send_message_as_string(RunningStatus::Failed, "failed message");
         send_message_as_string(RunningStatus::Notice, "notice message");
         send_message_as_string(RunningStatus::Success, "success message");
-        send_message_as_string(RunningStatus::Warning, "warning message");
     }
 }
