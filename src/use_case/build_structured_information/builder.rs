@@ -9,25 +9,22 @@ use crate::infrastructure::file_path_provider::html_file_path_provider::HtmlFile
 use crate::infrastructure::file_path_provider::json_file_path_provider::JsonFilePathProvider;
 use crate::infrastructure::reader::read_html::read_html;
 use crate::infrastructure::writer::write_json_from_proposal::write_json_from_proposal;
-use crate::presentation::send_message_to_console::send_message_to_console;
-use crate::presentation::send_message_to_console::RunningStatus;
-use crate::presentation::terminal_message_presenter::ConsoleMessenger;
-use crate::presentation::terminal_message_presenter::MessageType;
+use crate::presentation::send_message::send_message_to_console;
+use crate::presentation::send_message::RunningStatus;
+use crate::presentation::send_message::send_message_as_string;
 
 pub fn build_structured_proposal_information() -> ProposalModel {
-    let error_message = ConsoleMessenger::new(
-        "Failed to get structured information from the HTML file".to_string(),
-        MessageType::Failed,
-    );
-
     /*
      * read html data in local
      */
     let html_path_provider = HtmlFilePathProvider::new("proposal");
     let html_path = html_path_provider.get_path();
 
-    let html_text =
-        read_html(html_path).unwrap_or_else(|_| panic!("{}", error_message.supply_message()));
+    let html_text = read_html(html_path)
+        .unwrap_or_else(|_| panic!(
+            "{}",
+            send_message_as_string(RunningStatus::Failed, "Failed to read HTML file")
+        ));
 
     /*
      * extract title and speaker from html
@@ -63,7 +60,10 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     let file_path = json_path_provider.get_path();
 
     write_json_from_proposal(&proposal, file_path)
-        .unwrap_or_else(|_| panic!("{}", error_message.supply_message()));
+        .unwrap_or_else(|_| panic!(
+            "{}",
+            send_message_as_string(RunningStatus::Failed, "Failed to write JSON file")
+        ));
 
     proposal
 }
