@@ -11,12 +11,16 @@ pub fn download_og_image(url: &str, file_base_name: &str) -> Result<PathBuf, Str
 
     match image_fetcher_result {
         Ok(image_fetcher_result) => {
-            /* get path to save our image */
+            /*
+             * Get the file path to save the image
+             */
             let image_file_path_provider =
                 ImageFilePathProvider::new(file_base_name, &image_fetcher_result.file_extension);
             let save_file_path = image_file_path_provider.get_path();
 
-            /* save image */
+            /*
+             * Write the image to a file
+             */
             let saved_file_path =
                 write_image_from_bytes(save_file_path, image_fetcher_result.bytes_format_image);
 
