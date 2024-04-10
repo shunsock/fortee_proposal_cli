@@ -1,6 +1,6 @@
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
-use crate::use_case::build_structured_information::builder::build_structured_proposal_information;
+use crate::use_case::build_structured_information::build_structured_proposal_information;
 use crate::use_case::download_html_page::downloader::download_html_page;
 use crate::use_case::download_og_image::downloader::download_og_image;
 
