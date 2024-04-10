@@ -6,9 +6,7 @@ use crate::infrastructure::extractor::extract_title::find_title;
 use crate::infrastructure::extractor::extract_track::find_track;
 use crate::infrastructure::file_path_provider::file_path_provider_trait::FilePathProviderTrait;
 use crate::infrastructure::file_path_provider::html_file_path_provider::HtmlFilePathProvider;
-use crate::infrastructure::file_path_provider::json_file_path_provider::JsonFilePathProvider;
 use crate::infrastructure::reader::read_html_file::read_html_file;
-use crate::infrastructure::writer::write_json_from_proposal_model::write_json_from_proposal;
 use crate::presentation::send_message::send_message_as_string;
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
@@ -51,10 +49,7 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     /*
      * write structured data to json file
      */
-    let json_path_provider = JsonFilePathProvider::new("proposal");
-    let file_path = json_path_provider.get_path();
-
-    let res = write_json_from_proposal(&proposal, file_path);
+    let res = proposal.write_as_json();
     match res {
         Ok(_) => {
             send_message_to_console(

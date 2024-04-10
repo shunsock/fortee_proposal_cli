@@ -1,20 +1,25 @@
-use crate::infrastructure::file_path_provider::file_path_provider_trait::FilePathProviderTrait;
-use crate::infrastructure::file_path_provider::json_file_path_provider::JsonFilePathProvider;
+use crate::infrastructure::file_path_provider::show_home_dir::show_home_dir;
 use std::path::PathBuf;
 
+/// ProposalJsonFile provides the file path of the proposal.json file
+/// The file path is $HOME/.fortee/json/proposal.json
+/// You MUST use this through ProposalJsonFile::new() to get the instance
 pub struct ProposalJsonFile {
-    directory_name: String,
+    pub(crate) path: PathBuf,
 }
 
 impl ProposalJsonFile {
     pub fn new() -> Self {
-        ProposalJsonFile {
-            directory_name: "proposal".to_string(),
-        }
+        let home_dir: String = show_home_dir();
+        let file_path = PathBuf::from(home_dir)
+            .join(".fortee")
+            .join("json")
+            .join("proposal.json");
+
+        ProposalJsonFile { path: file_path }
     }
 
     pub fn get_file_path(&self) -> PathBuf {
-        let path_provider = JsonFilePathProvider::new(&self.directory_name);
-        path_provider.get_path()
+        self.path.clone()
     }
 }
