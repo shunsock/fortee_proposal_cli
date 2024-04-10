@@ -33,7 +33,10 @@ impl ProposalModel {
         let json_formatted_string = serde_json::to_string_pretty(self);
         match json_formatted_string {
             Ok(json) => {
-                send_message_to_console(RunningStatus::Success, &json);
+                send_message_to_console(
+                    RunningStatus::Success,
+                    &format!("Show Proposal Information: \n{}", json),
+                );
             }
             Err(e) => {
                 send_message_to_console(RunningStatus::Failed, &format!("Error: {}", e));
