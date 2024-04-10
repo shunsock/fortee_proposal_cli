@@ -6,6 +6,8 @@ jobs:
   test:
     name: Test Suite
     runs-on: ubuntu-latest
+    env:
+      RUSTFLAGS: "--cfg ci_env"
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
