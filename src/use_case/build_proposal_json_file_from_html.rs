@@ -8,7 +8,7 @@ use crate::infrastructure::file_path_provider::file_path_provider_trait::FilePat
 use crate::infrastructure::file_path_provider::html_file_path_provider::HtmlFilePathProvider;
 use crate::infrastructure::file_path_provider::json_file_path_provider::JsonFilePathProvider;
 use crate::infrastructure::reader::read_html::read_html;
-use crate::infrastructure::writer::write_json_from_proposal::write_json_from_proposal;
+use crate::infrastructure::writer::write_json_from_proposal_model::write_json_from_proposal;
 use crate::presentation::send_message::send_message_as_string;
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
