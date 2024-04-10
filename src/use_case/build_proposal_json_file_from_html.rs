@@ -7,8 +7,8 @@ use crate::infrastructure::extractor::extract_track::find_track;
 use crate::infrastructure::file_path_provider::file_path_provider_trait::FilePathProviderTrait;
 use crate::infrastructure::file_path_provider::html_file_path_provider::HtmlFilePathProvider;
 use crate::infrastructure::file_path_provider::json_file_path_provider::JsonFilePathProvider;
-use crate::infrastructure::reader::read_html::read_html;
-use crate::infrastructure::writer::write_json_from_proposal::write_json_from_proposal;
+use crate::infrastructure::reader::read_html_file::read_html_file;
+use crate::infrastructure::writer::write_json_from_proposal_model::write_json_from_proposal;
 use crate::presentation::send_message::send_message_as_string;
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
@@ -20,7 +20,7 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     let html_path_provider = HtmlFilePathProvider::new("proposal");
     let html_path = html_path_provider.get_path();
 
-    let html_text = read_html(html_path).unwrap_or_else(|_| {
+    let html_text = read_html_file(html_path).unwrap_or_else(|_| {
         panic!(
             "{}",
             send_message_as_string(RunningStatus::Failed, "Failed to read HTML file")
