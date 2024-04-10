@@ -54,12 +54,18 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     let json_path_provider = JsonFilePathProvider::new("proposal");
     let file_path = json_path_provider.get_path();
 
-    write_json_from_proposal(&proposal, file_path).unwrap_or_else(|_| {
-        panic!(
-            "{}",
-            send_message_as_string(RunningStatus::Failed, "Failed to write JSON file")
-        )
-    });
+    let res = write_json_from_proposal(&proposal, file_path);
+    match res {
+        Ok(_) => {
+            send_message_to_console(
+                RunningStatus::Success,
+                "Successfully write structured information to the JSON file",
+            );
+        }
+        Err(e) => {
+            send_message_to_console(RunningStatus::Failed, &format!("Error: {}", e));
+        }
+    }
 
     proposal
 }

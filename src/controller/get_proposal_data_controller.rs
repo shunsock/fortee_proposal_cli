@@ -1,3 +1,4 @@
+use crate::domain::proposal::proposal_json_file::ProposalJsonFile;
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
 use crate::use_case::build_structured_information::build_structured_proposal_information;
@@ -27,6 +28,16 @@ pub fn get_proposal_data_controller(url: &str) {
      * Print the structured information
      */
     proposal.print();
+    let proposal_json_file = ProposalJsonFile::new();
+    let file_path = proposal_json_file.get_file_path();
+    send_message_to_console(
+        RunningStatus::Notice,
+        format!(
+            "you can get data by running: cat `{}`",
+            file_path.to_string_lossy()
+        )
+        .as_str(),
+    );
 
     /*
      * Download OG image from the structured information
