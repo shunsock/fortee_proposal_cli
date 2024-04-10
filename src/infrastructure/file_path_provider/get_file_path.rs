@@ -21,6 +21,7 @@ mod tests {
     /// Test whether the file path which exists is generated correctly
     /// If you have already installed the command, there are $HOME/.fortee/test/test.txt
     #[test]
+    #[cfg_attr(ci_env, ignore)]
     fn test_success_for_file_exists() {
         let directory_name: String = "test".to_string();
         let file_base_name: String = "test".to_string();
