@@ -5,7 +5,7 @@ use std::path::PathBuf;
 pub fn download_og_image(url: &str) -> Result<PathBuf, String> {
     let image_fetcher_result: ImageFetcherResult = match fetch_og_image(url) {
         Ok(result) => result,
-        Err(e) => return Err(format!("Error: {}", e)),
+        Err(e) => return Err(e.to_string()),
     };
 
     let proposal_image_file_writer: ProposalImageFileWriter = ProposalImageFileWriter::new(
@@ -15,6 +15,6 @@ pub fn download_og_image(url: &str) -> Result<PathBuf, String> {
 
     match proposal_image_file_writer.write() {
         Ok(_) => Ok(proposal_image_file_writer.get_path()),
-        Err(e) => Err(format!("Error: {}", e)),
+        Err(e) => Err(e.to_string()),
     }
 }
