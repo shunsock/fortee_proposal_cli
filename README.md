@@ -47,10 +47,10 @@ $HOME/.fortee/image/og_image.{file_extension}
 fortee community cliのインストールはマニュアルで行う必要があります．
 
 ```bash
-git clone https://github.com/shunsock/fortee_cli_test.git 
-cd fortee-proposal-downloader
+git clone https://github.com/shunsock/fortee_proposal_cli.git 
+cd fortee_proposal_cli
 make install
-fortee https://fortee.jp/phperkaigi-2024/proposal/eff9589b-b603-4b23-aa35-42948443a80b
+fortee -u https://fortee.jp/phperkaigi-2024/proposal/eff9589b-b603-4b23-aa35-42948443a80b
 ```
 
 ## Usage
