@@ -1,28 +1,62 @@
-# Fortee Proposal Downloader
-
+# Fortee Proposal CLI
 ## Overview
-This is a command line tool to download proposal data from fortee talk page.
+[Fortee](https://fortee.jp)に投稿されたプロポーザルデータをのURLを使ってダウンロード+表示するためのコマンドラインツールです．
+URLを指定すると，プロポーザルデータをダウンロードします．以下のように動作します．
+
 ![command example](command_example.png)
 
-## Warning
-This tool is not officially supported by fortee. Use at your own risk.
-Also, this is testing version. It may not work properly.
+ダウンロードされるプロポーザルデータは以下のようなJSON形式です．
 
-## Getting Started
-
-```bash
-git clone this repository
-cd fortee-proposal-downloader
-make install
-fortee-cli --help
+```json
+{
+  "title": "Readable 正規表現",
+  "schedule": "2024/03/07 17:30〜",
+  "track": "Track A",
+  "speaker": "shunsock",
+  "proposal_page_url": "https://fortee.jp/phperkaigi-2024/proposal/eff9589b-b603-4b23-aa35-42948443a80b",
+  "og_image_url": "https://fortee.jp/phperkaigi-2024/proposal/og-image/eff9589b-b603-4b23-aa35-42948443a80b.png"
+}
 ```
 
-[example fortee talk page](https://fortee.jp/phpcon-2023/proposal/e42643e3-da14-47ef-b44b-414a8e31bc4b)
+また，OGイメージもダウンロードされます．保存されたプロポーザルのJSONデータやOGイメージは以下の場所に保存されます．
+```bash
+$HOME/.fortee/html/proposal.json
+$HOME/.fortee/image/og_image.{file_extension}
+```
+
+以下のようにコマンドラインで表示されるので，ここをコピー&ペーストすると楽に取得できます．
+
+```bash
+[notice] you can get data by running: cp /Users/shunsuke.tsuchiya/.fortee/json/proposal.json path/your/directory
+[notice] you can get data by running: cp /Users/shunsuke.tsuchiya/.fortee/image/og_image.png path/your/directory
+```
+
+## Warning
+このツールは，fortee公式にはサポートされていません．自己責任で使用してください．
+また，これはテストバージョンです．正常に動作しない可能性があります．
+
+## Requirements
+以下のソフトウェアのインストールを前提としています．
+- `Git`
+- `Make`
+
+以下のソフトウェアは開発者向けのものです．
+- `Cargo`
+
+## Getting Started
+fortee community cliのインストールはマニュアルで行う必要があります．
+
+```bash
+git clone https://github.com/shunsock/fortee_cli_test.git 
+cd fortee-proposal-downloader
+make install
+fortee-cli https://fortee.jp/phperkaigi-2024/proposal/eff9589b-b603-4b23-aa35-42948443a80b
+```
 
 ## Usage
 ### Download
 ```bash
-git clone this repository
+git clone https://github.com/shunsock/fortee_cli_test.git
 ```
 
 ### Install & Uninstall
@@ -38,7 +72,7 @@ fortee-cli --help
 
 ### Download proposal data
 ```bash
-fortee-cli download --url {your_proposal_url_page}
+fortee-cli -u {your_proposal_url_page}
 ```
 
 ### (For Developer) Run All Rust Pre-Commit Checks
@@ -49,4 +83,9 @@ make watcher
 ### (For Developer) Install Rust Pre-Commit Components (rustfmt, clippy, etc.)
 ```bash
 make install-dev
+```
+
+### (For Developer) Build Release Binary and Copy to `bin` Directory
+```bash
+make publish
 ```
