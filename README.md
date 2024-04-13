@@ -50,7 +50,7 @@ fortee community cliのインストールはマニュアルで行う必要があ
 git clone https://github.com/shunsock/fortee_cli_test.git 
 cd fortee-proposal-downloader
 make install
-fortee-cli https://fortee.jp/phperkaigi-2024/proposal/eff9589b-b603-4b23-aa35-42948443a80b
+fortee https://fortee.jp/phperkaigi-2024/proposal/eff9589b-b603-4b23-aa35-42948443a80b
 ```
 
 ## Usage
@@ -67,12 +67,12 @@ make uninstall
 
 ### Help
 ```bash
-fortee-cli --help
+fortee --help
 ```
 
 ### Download proposal data
 ```bash
-fortee-cli -u {your_proposal_url_page}
+fortee -u {your_proposal_url_page}
 ```
 
 ### (For Developer) Run All Rust Pre-Commit Checks
