@@ -12,8 +12,8 @@ fn show_proposal_image_file_path(file_extension: &str) -> PathBuf {
     let home_dir = show_home_dir();
     let file_path: PathBuf = PathBuf::from(home_dir)
         .join(".fortee")
-        .join("html")
-        .join(file_extension);
+        .join("image")
+        .join(format!("og_image.{}", file_extension));
 
     file_path
 }
