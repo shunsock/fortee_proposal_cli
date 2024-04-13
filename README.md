@@ -22,7 +22,7 @@ fortee-cli --help
 ## Usage
 ### Download
 ```bash
-git clone this repository
+git clone https://github.com/shunsock/fortee_cli_test.git
 ```
 
 ### Install & Uninstall
@@ -38,7 +38,7 @@ fortee-cli --help
 
 ### Download proposal data
 ```bash
-fortee-cli download --url {your_proposal_url_page}
+fortee-cli --url {your_proposal_url_page}
 ```
 
 ### (For Developer) Run All Rust Pre-Commit Checks
