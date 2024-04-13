@@ -2,8 +2,8 @@ use bytes::Bytes;
 use reqwest::Error;
 
 pub struct ImageFetcherResult {
-    pub bytes_format_image: Bytes,
-    pub file_extension: String,
+    pub(crate) bytes_format_image: Bytes,
+    pub(crate) file_extension: String,
 }
 
 #[tokio::main]

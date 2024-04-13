@@ -3,13 +3,16 @@ use std::fs::File;
 use std::io::Write;
 use std::path::PathBuf;
 
-pub fn write_image_from_bytes(save_file_path: PathBuf, buffer: Bytes) -> PathBuf {
-    let mut file = File::create(save_file_path.clone()).expect("[Error] Failed to create file");
+pub fn write_image_from_bytes(save_file_path: PathBuf, buffer: Bytes) -> Result<bool, String> {
+    let mut file = match File::create(save_file_path.clone()) {
+        Ok(file) => file,
+        Err(e) => return Err(format!("[Error] Failed to create file: {}", e)),
+    };
 
-    file.write_all(&buffer)
-        .expect("[Error] Failed to save image");
-
-    save_file_path
+    match file.write_all(&buffer) {
+        Ok(_) => Ok(true),
+        Err(e) => Err(format!("[Error] Failed to write file: {}", e)),
+    }
 }
 
 #[cfg(test)]
@@ -23,7 +26,7 @@ mod tests {
         let test_content = Bytes::from("test content");
 
         let res = write_image_from_bytes(test_file_path.clone(), test_content);
-        assert_eq!(res, test_file_path);
+        assert_eq!(res, Ok(true));
 
         std::fs::remove_file(test_file_path).unwrap();
     }

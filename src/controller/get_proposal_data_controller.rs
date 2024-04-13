@@ -65,7 +65,7 @@ pub fn get_proposal_data_controller(url: &str) {
      * Download OG image from the structured information
      */
     let og_image_url: &str = proposal.get_proposal_data().get_og_image_url();
-    let image_path = match download_og_image(og_image_url, "og_image") {
+    let image_path = match download_og_image(og_image_url) {
         Ok(image_path) => {
             send_message_to_console(
                 RunningStatus::Success,
