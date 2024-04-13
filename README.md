@@ -47,16 +47,16 @@ $HOME/.fortee/image/og_image.{file_extension}
 fortee community cliのインストールはマニュアルで行う必要があります．
 
 ```bash
-git clone https://github.com/shunsock/fortee_cli_test.git 
-cd fortee-proposal-downloader
+git clone https://github.com/shunsock/fortee_proposal_cli.git 
+cd fortee_proposal_cli
 make install
-fortee https://fortee.jp/phperkaigi-2024/proposal/eff9589b-b603-4b23-aa35-42948443a80b
+fortee -u https://fortee.jp/phperkaigi-2024/proposal/eff9589b-b603-4b23-aa35-42948443a80b
 ```
 
 ## Usage
 ### Download
 ```bash
-git clone https://github.com/shunsock/fortee_cli_test.git
+git clone https://github.com/shunsock/fortee_proposal_cli.git
 ```
 
 ### Install & Uninstall
@@ -88,4 +88,31 @@ make install-dev
 ### (For Developer) Build Release Binary and Copy to `bin` Directory
 ```bash
 make publish
+```
+## Contribution
+このプロジェクトには，バグレポートや機能提案，コードの改善などのコントリビューションを歓迎します．
+
+### Workflow
+1. Fork the repository
+2. Create Feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request
+
+### Install Development Tools
+```bash
+brew install rustup
+make install-dev
+```
+
+### Confirm Rust Code
+```bash
+make watcher
+```
+
+### Check Binary Action
+```bash
+make publish
+make install
+fortee -u https://fortee.jp/phperkaigi-2024/proposal/eff9589b-b603-4b23-aa35-42948443a80b
 ```
