@@ -1,5 +1,6 @@
+use crate::domain::proposal::proposal_data_model::ProposalDataModel;
 use crate::domain::proposal::proposal_html_file::ProposalHtml;
-use crate::domain::proposal::proposal_model::ProposalModel;
+use crate::domain::proposal::proposal_json_file::ProposalJsonFileWriter;
 use crate::infrastructure::extractor::extract_og_image_url::find_og_image_url;
 use crate::infrastructure::extractor::extract_schedule::find_schedule;
 use crate::infrastructure::extractor::extract_speaker::find_speaker;
@@ -8,7 +9,7 @@ use crate::infrastructure::extractor::extract_track::find_track;
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
 
-pub fn build_structured_proposal_information() -> ProposalModel {
+pub fn build_structured_proposal_information() -> Result<bool, String> {
     /*
      * read html data in local
      */
@@ -29,7 +30,7 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     /*
      * create structured data from above results
      */
-    let proposal = ProposalModel::new(title, schedule, track, speaker, og_image_url);
+    let proposal = ProposalDataModel::new(title, schedule, track, speaker, og_image_url);
 
     send_message_to_console(
         RunningStatus::Success,
@@ -39,18 +40,19 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     /*
      * write structured data to json file
      */
-    let res: Result<bool, String> = proposal.write_as_json();
+    let proposal_json_writer = ProposalJsonFileWriter::new(proposal);
+    let res: Result<bool, String> = proposal_json_writer.write();
     match res {
         Ok(_) => {
             send_message_to_console(
                 RunningStatus::Success,
                 "Successfully write structured information to the JSON file",
             );
+            Ok(true)
         }
         Err(e) => {
             send_message_to_console(RunningStatus::Failed, &format!("Error: {}", e));
+            Err(e)
         }
     }
-
-    proposal
 }
