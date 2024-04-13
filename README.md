@@ -84,3 +84,8 @@ make watcher
 ```bash
 make install-dev
 ```
+
+### (For Developer) Build Release Binary and Copy to `bin` Directory
+```bash
+make publish
+```
