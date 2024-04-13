@@ -1,4 +1,4 @@
-use crate::domain::proposal::proposal_json_file::ProposalJsonFile;
+use crate::domain::proposal::proposal_json::ProposalJson;
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
 use crate::use_case::build_proposal_json_file_from_html::build_structured_proposal_information;
@@ -18,7 +18,14 @@ pub fn get_proposal_data_controller(url: &str) {
     /*
      * Extract structured information from the downloaded HTML page
      */
-    let proposal = build_structured_proposal_information();
+    let write_proposal_result: Result<bool, String> = build_structured_proposal_information();
+    match write_proposal_result {
+        Ok(_) => {}
+        Err(e) => {
+            send_message_to_console(RunningStatus::Failed, e.as_str());
+            return;
+        }
+    }
     send_message_to_console(
         RunningStatus::Success,
         "Structured proposal information has been successfully created.",
@@ -27,8 +34,23 @@ pub fn get_proposal_data_controller(url: &str) {
     /*
      * Print the structured information
      */
-    proposal.print();
-    let proposal_json_file = ProposalJsonFile::new();
+    let proposal = ProposalJson::new();
+    let pretty_json = match proposal.get_pretty_json_string() {
+        Ok(pretty_json) => pretty_json,
+        Err(e) => {
+            send_message_to_console(RunningStatus::Failed, e.as_str());
+            return;
+        }
+    };
+    send_message_to_console(
+        RunningStatus::Success,
+        format!("\n {}", &pretty_json).as_str(),
+    );
+
+    /*
+     * Write information to access the proposal.json file
+     */
+    let proposal_json_file = ProposalJson::new();
     let file_path = proposal_json_file.get_file_path();
     send_message_to_console(
         RunningStatus::Notice,
@@ -42,9 +64,15 @@ pub fn get_proposal_data_controller(url: &str) {
     /*
      * Download OG image from the structured information
      */
-    let image_path = download_og_image(&proposal.og_image_url, "og_image");
-    let image_path = match image_path {
-        Ok(image_path) => image_path,
+    let og_image_url: &str = proposal.get_proposal_data().get_og_image_url();
+    let image_path = match download_og_image(og_image_url) {
+        Ok(image_path) => {
+            send_message_to_console(
+                RunningStatus::Success,
+                "OG Image has been successfully downloaded.",
+            );
+            image_path
+        }
         Err(_) => {
             send_message_to_console(
                 RunningStatus::Failed,
@@ -53,10 +81,6 @@ pub fn get_proposal_data_controller(url: &str) {
             return;
         }
     };
-    send_message_to_console(
-        RunningStatus::Success,
-        "OG Image has been successfully downloaded.",
-    );
 
     /*
      * Show how to get the downloaded image for users

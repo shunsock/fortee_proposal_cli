@@ -1,31 +1,20 @@
-use crate::domain::proposal::proposal_model::ProposalModel;
+use crate::domain::proposal::proposal_data_model::ProposalDataModel;
+use crate::domain::proposal::proposal_html::ProposalHtml;
+use crate::domain::proposal::proposal_json::ProposalJsonFileWriter;
 use crate::infrastructure::extractor::extract_og_image_url::find_og_image_url;
 use crate::infrastructure::extractor::extract_schedule::find_schedule;
 use crate::infrastructure::extractor::extract_speaker::find_speaker;
 use crate::infrastructure::extractor::extract_title::find_title;
 use crate::infrastructure::extractor::extract_track::find_track;
-use crate::infrastructure::file_path_provider::file_path_provider_trait::FilePathProviderTrait;
-use crate::infrastructure::file_path_provider::html_file_path_provider::HtmlFilePathProvider;
-use crate::infrastructure::file_path_provider::json_file_path_provider::JsonFilePathProvider;
-use crate::infrastructure::reader::read_html_file::read_html_file;
-use crate::infrastructure::writer::write_json_from_proposal_model::write_json_from_proposal;
-use crate::presentation::send_message::send_message_as_string;
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
 
-pub fn build_structured_proposal_information() -> ProposalModel {
+pub fn build_structured_proposal_information() -> Result<bool, String> {
     /*
      * read html data in local
      */
-    let html_path_provider = HtmlFilePathProvider::new("proposal");
-    let html_path = html_path_provider.get_path();
-
-    let html_text = read_html_file(html_path).unwrap_or_else(|_| {
-        panic!(
-            "{}",
-            send_message_as_string(RunningStatus::Failed, "Failed to read HTML file")
-        )
-    });
+    let proposal_html_file: ProposalHtml = ProposalHtml::new();
+    let html_text: String = proposal_html_file.get_html();
 
     /*
      * extract title and speaker from html
@@ -41,7 +30,7 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     /*
      * create structured data from above results
      */
-    let proposal = ProposalModel::new(title, schedule, track, speaker, og_image_url);
+    let proposal = ProposalDataModel::new(title, schedule, track, speaker, og_image_url);
 
     send_message_to_console(
         RunningStatus::Success,
@@ -51,21 +40,19 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     /*
      * write structured data to json file
      */
-    let json_path_provider = JsonFilePathProvider::new("proposal");
-    let file_path = json_path_provider.get_path();
-
-    let res = write_json_from_proposal(&proposal, file_path);
+    let proposal_json_writer = ProposalJsonFileWriter::new(proposal);
+    let res: Result<bool, String> = proposal_json_writer.write();
     match res {
         Ok(_) => {
             send_message_to_console(
                 RunningStatus::Success,
                 "Successfully write structured information to the JSON file",
             );
+            Ok(true)
         }
         Err(e) => {
             send_message_to_console(RunningStatus::Failed, &format!("Error: {}", e));
+            Err(e)
         }
     }
-
-    proposal
 }
