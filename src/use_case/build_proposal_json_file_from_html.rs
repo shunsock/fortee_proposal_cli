@@ -13,7 +13,14 @@ pub fn build_structured_proposal_information(proposal_page_url: String) -> Resul
     /*
      * read html data in local
      */
-    let proposal_html_file: ProposalHtml = ProposalHtml::new();
+    let proposal_html_file: ProposalHtml = match ProposalHtml::new() {
+        Ok(html) => html,
+        Err(e) => {
+            send_message_to_console(RunningStatus::Failed, &format!("Error: {}", e));
+            return Err(e);
+        }
+    };
+
     let html_text: String = proposal_html_file.get_html();
 
     /*

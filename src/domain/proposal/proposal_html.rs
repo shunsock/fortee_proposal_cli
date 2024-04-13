@@ -21,12 +21,12 @@ fn show_proposal_html_file_path() -> PathBuf {
 }
 
 impl ProposalHtml {
-    pub fn new() -> Self {
+    pub fn new() -> Result<Self, String> {
         let file_path: PathBuf = show_proposal_html_file_path();
         let html: Result<String, String> = read_file_as_string(file_path);
         match html {
-            Ok(html_value) => ProposalHtml { html: html_value },
-            Err(e) => panic!("Error: {}", e),
+            Ok(html) => Ok(ProposalHtml { html }),
+            Err(e) => Err(format!("Error: {}", e)),
         }
     }
 
