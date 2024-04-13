@@ -1,13 +1,11 @@
 use crate::infrastructure::extractor::extract_first_content_from_text::extract_first_content_from_text;
 
-pub fn find_speaker(html_content: &str) -> String {
+pub fn find_speaker(html_content: &str) -> Result<String, String> {
     let pattern = r#"<title>.+ by ([^\s|]+) \|"#;
 
-    let speaker_optional = extract_first_content_from_text(html_content, pattern);
-
-    match speaker_optional {
-        Some(speaker) => speaker,
-        None => panic!("Failed to extract speaker from the HTML file"),
+    match extract_first_content_from_text(html_content, pattern) {
+        Some(speaker) => Ok(speaker),
+        None => Err("Error: Failed to extract speaker from the HTML file".to_string()),
     }
 }
 
@@ -21,6 +19,6 @@ mod tests {
             <title>プロポーザルに通したいのでプロポーザルのテキスト分析をします！ by shunsock | トーク | PHPカンファレンス北海道2024 #phpcondo - fortee.jp</title>
         "#;
         let schedule = find_speaker(html_content);
-        assert_eq!(schedule, "shunsock");
+        assert_eq!(schedule, Ok("shunsock".to_string()));
     }
 }
