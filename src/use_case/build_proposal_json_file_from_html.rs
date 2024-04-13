@@ -1,6 +1,6 @@
 use crate::domain::proposal::proposal_data_model::ProposalDataModel;
-use crate::domain::proposal::proposal_html_file::ProposalHtml;
-use crate::domain::proposal::proposal_json_file::ProposalJsonFileWriter;
+use crate::domain::proposal::proposal_html::ProposalHtml;
+use crate::domain::proposal::proposal_json::ProposalJsonFileWriter;
 use crate::infrastructure::extractor::extract_og_image_url::find_og_image_url;
 use crate::infrastructure::extractor::extract_schedule::find_schedule;
 use crate::infrastructure::extractor::extract_speaker::find_speaker;

@@ -1,4 +1,4 @@
-use crate::domain::proposal::proposal_html_file::ProposalHtmlFileWriter;
+use crate::domain::proposal::proposal_html::ProposalHtmlFileWriter;
 use crate::infrastructure::fetcher::fetch_fortee_proposal_page::fetch_fortee_proposal_page;
 use crate::presentation::send_message::send_message_as_string;
 use crate::presentation::send_message::RunningStatus;

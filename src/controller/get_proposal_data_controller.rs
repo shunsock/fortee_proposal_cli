@@ -1,4 +1,4 @@
-use crate::domain::proposal::proposal_json_file::ProposalJson;
+use crate::domain::proposal::proposal_json::ProposalJson;
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
 use crate::use_case::build_proposal_json_file_from_html::build_structured_proposal_information;

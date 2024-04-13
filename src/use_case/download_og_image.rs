@@ -1,4 +1,4 @@
-use crate::domain::proposal::proposal_image_file::ProposalImageFileWriter;
+use crate::domain::proposal::proposal_image::ProposalImageFileWriter;
 use crate::infrastructure::fetcher::fetch_og_image::{fetch_og_image, ImageFetcherResult};
 use std::path::PathBuf;
 
