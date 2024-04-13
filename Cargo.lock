@@ -294,7 +294,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "fortee-cli"
+name = "fortee"
 version = "0.1.0"
 dependencies = [
  "bytes",

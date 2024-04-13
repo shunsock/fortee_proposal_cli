@@ -1,5 +1,5 @@
-SOURCE_PATH=bin/fortee-cli
-DEFAULT_COMMAND_PATH=/usr/local/bin/fortee-cli
+SOURCE_PATH=bin/fortee
+DEFAULT_COMMAND_PATH=/usr/local/bin/fortee
 
 # Start installation
 echo "[Fortee Cli Installer] Installing command to $DEFAULT_COMMAND_PATH ..."
