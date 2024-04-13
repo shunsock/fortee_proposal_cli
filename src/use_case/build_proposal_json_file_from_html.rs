@@ -1,13 +1,10 @@
+use crate::domain::proposal::proposal_html_file::ProposalHtml;
 use crate::domain::proposal::proposal_model::ProposalModel;
 use crate::infrastructure::extractor::extract_og_image_url::find_og_image_url;
 use crate::infrastructure::extractor::extract_schedule::find_schedule;
 use crate::infrastructure::extractor::extract_speaker::find_speaker;
 use crate::infrastructure::extractor::extract_title::find_title;
 use crate::infrastructure::extractor::extract_track::find_track;
-use crate::infrastructure::file_path_provider::file_path_provider_trait::FilePathProviderTrait;
-use crate::infrastructure::file_path_provider::html_file_path_provider::HtmlFilePathProvider;
-use crate::infrastructure::reader::read_html_file::read_html_file;
-use crate::presentation::send_message::send_message_as_string;
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
 
@@ -15,15 +12,8 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     /*
      * read html data in local
      */
-    let html_path_provider = HtmlFilePathProvider::new("proposal");
-    let html_path = html_path_provider.get_path();
-
-    let html_text = read_html_file(html_path).unwrap_or_else(|_| {
-        panic!(
-            "{}",
-            send_message_as_string(RunningStatus::Failed, "Failed to read HTML file")
-        )
-    });
+    let proposal_html_file: ProposalHtml = ProposalHtml::new();
+    let html_text: String = proposal_html_file.get_html();
 
     /*
      * extract title and speaker from html
@@ -49,7 +39,7 @@ pub fn build_structured_proposal_information() -> ProposalModel {
     /*
      * write structured data to json file
      */
-    let res = proposal.write_as_json();
+    let res: Result<bool, String> = proposal.write_as_json();
     match res {
         Ok(_) => {
             send_message_to_console(
