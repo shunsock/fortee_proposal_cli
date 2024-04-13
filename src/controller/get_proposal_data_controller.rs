@@ -1,4 +1,4 @@
-use crate::domain::proposal::proposal_json_file::ProposalJsonFile;
+use crate::domain::proposal::proposal_json_file::ProposalJson;
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
 use crate::use_case::build_proposal_json_file_from_html::build_structured_proposal_information;
@@ -34,7 +34,7 @@ pub fn get_proposal_data_controller(url: &str) {
     /*
      * Print the structured information
      */
-    let proposal = ProposalJsonFile::new();
+    let proposal = ProposalJson::new();
     let pretty_json = match proposal.get_pretty_json_string() {
         Ok(pretty_json) => pretty_json,
         Err(e) => {
@@ -50,7 +50,7 @@ pub fn get_proposal_data_controller(url: &str) {
     /*
      * Write information to access the proposal.json file
      */
-    let proposal_json_file = ProposalJsonFile::new();
+    let proposal_json_file = ProposalJson::new();
     let file_path = proposal_json_file.get_file_path();
     send_message_to_console(
         RunningStatus::Notice,

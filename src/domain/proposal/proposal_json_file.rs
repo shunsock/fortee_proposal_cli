@@ -15,12 +15,12 @@ pub fn show_proposal_json_file_path() -> PathBuf {
 /// ProposalJsonFile provides the file path of the proposal.json file
 /// The file path is $HOME/.fortee/json/proposal.json
 /// You MUST use this through ProposalJsonFile::new() to get the instance
-pub struct ProposalJsonFile {
+pub struct ProposalJson {
     path: PathBuf,
     value: ProposalDataModel,
 }
 
-impl ProposalJsonFile {
+impl ProposalJson {
     pub fn new() -> Self {
         let file_path: PathBuf = show_proposal_json_file_path();
 
@@ -44,7 +44,7 @@ impl ProposalJsonFile {
             }
         };
 
-        ProposalJsonFile {
+        ProposalJson {
             path: file_path,
             value: proposal_data,
         }
