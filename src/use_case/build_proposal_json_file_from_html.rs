@@ -16,7 +16,7 @@ pub fn build_structured_proposal_information(proposal_page_url: String) -> Resul
     let proposal_html_file: ProposalHtml = match ProposalHtml::new() {
         Ok(html) => html,
         Err(e) => {
-            send_message_to_console(RunningStatus::Failed, &format!("Error: {}", e));
+            send_message_to_console(RunningStatus::Failed, &e.to_string());
             return Err(e);
         }
     };
@@ -65,7 +65,7 @@ pub fn build_structured_proposal_information(proposal_page_url: String) -> Resul
             Ok(true)
         }
         Err(e) => {
-            send_message_to_console(RunningStatus::Failed, &format!("Error: {}", e));
+            send_message_to_console(RunningStatus::Failed, &e.to_string());
             Err(e)
         }
     }
