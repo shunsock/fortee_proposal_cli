@@ -1,13 +1,11 @@
 use crate::infrastructure::extractor::extract_first_content_from_text::extract_first_content_from_text;
 
-pub fn find_title(html_content: &str) -> String {
+pub fn find_title(html_content: &str) -> Result<String, String> {
     let pattern = r#"<title>(.+) by [^\s|]+ \|"#;
 
-    let title_optional = extract_first_content_from_text(html_content, pattern);
-
-    match title_optional {
-        Some(title) => title,
-        None => panic!("Failed to extract title from the HTML file"),
+    match extract_first_content_from_text(html_content, pattern) {
+        Some(speaker) => Ok(speaker),
+        None => Err("Error: Failed to extract speaker from the HTML file".to_string()),
     }
 }
 
@@ -23,7 +21,7 @@ mod tests {
         let schedule = find_title(html_content);
         assert_eq!(
             schedule,
-            "プロポーザルに通したいのでプロポーザルのテキスト分析をします！"
+            Ok("プロポーザルに通したいのでプロポーザルのテキスト分析をします！".to_string())
         );
     }
 }

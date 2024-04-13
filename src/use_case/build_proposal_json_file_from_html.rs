@@ -28,8 +28,21 @@ pub fn build_structured_proposal_information(proposal_page_url: String) -> Resul
      * 1. search html title tag which include information by regex
      * 2. extract title and speaker by regex
      */
-    let title: String = find_title(&html_text);
-    let speaker: String = find_speaker(&html_text);
+    let title: String = match find_title(&html_text) {
+        Ok(title) => title,
+        Err(e) => {
+            send_message_to_console(RunningStatus::Failed, &e.to_string());
+            return Err(e);
+        }
+    };
+    let speaker: String = match find_speaker(&html_text) {
+        Ok(speaker) => speaker,
+        Err(e) => {
+            send_message_to_console(RunningStatus::Failed, &e.to_string());
+            return Err(e);
+        }
+    };
+
     let schedule: String = find_schedule(&html_text);
     let track: String = find_track(&html_text);
     let og_image_url = find_og_image_url(&html_text);
