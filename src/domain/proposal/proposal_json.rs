@@ -1,4 +1,4 @@
-use super::proposal_data_model::ProposalDataModel;
+use crate::domain::proposal::proposal_data_model::ProposalDataModel;
 use crate::infrastructure::file_path_provider::show_home_dir::show_home_dir;
 use crate::infrastructure::reader::read_file::read_file_as_string;
 use crate::infrastructure::writer::write_string_to_file::write_string_to_file;
@@ -21,7 +21,7 @@ pub struct ProposalJson {
 }
 
 impl ProposalJson {
-    pub fn new() -> Self {
+    pub fn new() -> Result<Self, String> {
         let file_path: PathBuf = show_proposal_json_file_path();
 
         /*
@@ -30,7 +30,7 @@ impl ProposalJson {
         let json: String = match read_file_as_string(file_path.clone()) {
             Ok(json) => json,
             Err(e) => {
-                panic!("Failed to read the file: {:?}", e);
+                return Err(format!("Failed to read the file: {:?}", e));
             }
         };
 
@@ -38,16 +38,14 @@ impl ProposalJson {
          * Deserialize the JSON string to a ProposalDataModel
          */
         let proposal_data: ProposalDataModel = match serde_json::from_str(&json) {
-            Ok(value) => value,
-            Err(e) => {
-                panic!("Failed to deserialize the JSON: {:?}", e);
-            }
+            Ok(proposal_data) => proposal_data,
+            Err(e) => return Err(format!("Failed to deserialize the JSON: {:?}", e)),
         };
 
-        ProposalJson {
+        Ok(ProposalJson {
             path: file_path,
             value: proposal_data,
-        }
+        })
     }
 
     pub fn get_file_path(&self) -> PathBuf {
@@ -90,7 +88,7 @@ impl ProposalJsonFileWriter {
         let json_string: String = match serde_json::to_string(&self.value) {
             Ok(json_string) => json_string,
             Err(e) => {
-                panic!("Failed to serialize the value: {:?}", e);
+                return Err(format!("Failed to serialize the JSON: {:?}", e));
             }
         };
 

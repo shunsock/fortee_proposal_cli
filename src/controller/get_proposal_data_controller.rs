@@ -35,7 +35,14 @@ pub fn get_proposal_data_controller(url: &str) {
     /*
      * Print the structured information
      */
-    let proposal = ProposalJson::new();
+    let proposal = match ProposalJson::new() {
+        Ok(proposal) => proposal,
+        Err(e) => {
+            send_message_to_console(RunningStatus::Failed, e.as_str());
+            return;
+        }
+    };
+
     let pretty_json = match proposal.get_pretty_json_string() {
         Ok(pretty_json) => pretty_json,
         Err(e) => {
@@ -51,13 +58,19 @@ pub fn get_proposal_data_controller(url: &str) {
     /*
      * Write information to access the proposal.json file
      */
-    let proposal_json_file = ProposalJson::new();
-    let file_path = proposal_json_file.get_file_path();
+    let proposal_json_file = match ProposalJson::new() {
+        Ok(proposal_json_file) => proposal_json_file,
+        Err(e) => {
+            send_message_to_console(RunningStatus::Failed, e.as_str());
+            return;
+        }
+    };
+
     send_message_to_console(
         RunningStatus::Notice,
         format!(
             "you can get data by running: cp {} path/your/directory",
-            file_path.to_string_lossy()
+            proposal_json_file.get_file_path().to_string_lossy()
         )
         .as_str(),
     );
