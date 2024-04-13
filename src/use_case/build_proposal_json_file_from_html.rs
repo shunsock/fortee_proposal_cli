@@ -9,7 +9,7 @@ use crate::infrastructure::extractor::extract_track::find_track;
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
 
-pub fn build_structured_proposal_information() -> Result<bool, String> {
+pub fn build_structured_proposal_information(proposal_page_url: String) -> Result<bool, String> {
     /*
      * read html data in local
      */
@@ -30,7 +30,14 @@ pub fn build_structured_proposal_information() -> Result<bool, String> {
     /*
      * create structured data from above results
      */
-    let proposal = ProposalDataModel::new(title, schedule, track, speaker, og_image_url);
+    let proposal = ProposalDataModel::new(
+        title,
+        schedule,
+        track,
+        speaker,
+        proposal_page_url,
+        og_image_url,
+    );
 
     send_message_to_console(
         RunningStatus::Success,

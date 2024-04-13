@@ -9,6 +9,7 @@ pub struct ProposalDataModel {
     schedule: String,
     track: String,
     speaker: String,
+    proposal_page_url: String,
     og_image_url: String,
 }
 
@@ -18,6 +19,7 @@ impl ProposalDataModel {
         schedule: String,
         track: String,
         speaker: String,
+        proposal_page_url: String,
         og_image_url: String,
     ) -> Self {
         ProposalDataModel {
@@ -25,6 +27,7 @@ impl ProposalDataModel {
             schedule,
             track,
             speaker,
+            proposal_page_url,
             og_image_url,
         }
     }

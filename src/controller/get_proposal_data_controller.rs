@@ -18,7 +18,8 @@ pub fn get_proposal_data_controller(url: &str) {
     /*
      * Extract structured information from the downloaded HTML page
      */
-    let write_proposal_result: Result<bool, String> = build_structured_proposal_information();
+    let write_proposal_result: Result<bool, String> =
+        build_structured_proposal_information(url.to_string());
     match write_proposal_result {
         Ok(_) => {}
         Err(e) => {
