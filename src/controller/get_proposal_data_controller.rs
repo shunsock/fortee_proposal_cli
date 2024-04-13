@@ -56,7 +56,7 @@ pub fn get_proposal_data_controller(url: &str) {
     send_message_to_console(
         RunningStatus::Notice,
         format!(
-            "you can get data by running: cp {}",
+            "you can get data by running: cp {} path/your/directory",
             file_path.to_string_lossy()
         )
         .as_str(),

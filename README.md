@@ -38,7 +38,7 @@ fortee-cli --help
 
 ### Download proposal data
 ```bash
-fortee-cli --url {your_proposal_url_page}
+fortee-cli -u {your_proposal_url_page}
 ```
 
 ### (For Developer) Run All Rust Pre-Commit Checks
