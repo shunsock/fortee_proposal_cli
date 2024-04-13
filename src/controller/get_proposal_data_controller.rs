@@ -9,11 +9,18 @@ pub fn get_proposal_data_controller(url: &str) {
     /*
      * Download HTML page from the given URL
      */
-    download_html_page(url);
-    send_message_to_console(
-        RunningStatus::Success,
-        "HTML page has been successfully downloaded.",
-    );
+    match download_html_page(url) {
+        Ok(_) => {
+            send_message_to_console(
+                RunningStatus::Success,
+                "HTML page has been successfully downloaded.",
+            );
+        }
+        Err(e) => {
+            send_message_to_console(RunningStatus::Failed, e.as_str());
+            return;
+        }
+    }
 
     /*
      * Extract structured information from the downloaded HTML page
