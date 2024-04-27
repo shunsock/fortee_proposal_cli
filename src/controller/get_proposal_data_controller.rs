@@ -5,11 +5,16 @@ use crate::use_case::build_proposal_json_file_from_html::build_structured_propos
 use crate::use_case::download_fortee_proposal_page_html::download_html_page;
 use crate::use_case::download_og_image::download_og_image;
 
-pub fn get_proposal_data_controller(url: &str) {
+pub struct GetProposalDataDto {
+    pub(crate) url: String,
+    pub(crate) output_og_image: bool,
+}
+
+pub fn get_proposal_data_controller(dto: &GetProposalDataDto) {
     /*
      * Download HTML page from the given URL
      */
-    match download_html_page(url) {
+    match download_html_page(&dto.url) {
         Ok(_) => {
             send_message_to_console(
                 RunningStatus::Success,
@@ -26,7 +31,7 @@ pub fn get_proposal_data_controller(url: &str) {
      * Extract structured information from the downloaded HTML page
      */
     let write_proposal_result: Result<bool, String> =
-        build_structured_proposal_information(url.to_string());
+        build_structured_proposal_information(dto.url.to_string());
     match write_proposal_result {
         Ok(_) => {}
         Err(e) => {
@@ -102,6 +107,8 @@ pub fn get_proposal_data_controller(url: &str) {
             return;
         }
     };
+
+    // TODO: Implement output og image to current directory
 
     /*
      * Show how to get the downloaded image for users
