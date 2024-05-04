@@ -1,15 +1,21 @@
 use crate::domain::proposal::proposal_json::ProposalJson;
+use crate::infrastructure::copier::file_copier::FileCopier;
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
 use crate::use_case::build_proposal_json_file_from_html::build_structured_proposal_information;
 use crate::use_case::download_fortee_proposal_page_html::download_html_page;
 use crate::use_case::download_og_image::download_og_image;
 
-pub fn get_proposal_data_controller(url: &str) {
+pub struct GetProposalDataDto {
+    pub(crate) url: String,
+    pub(crate) output_og_image: bool,
+}
+
+pub fn get_proposal_data_controller(dto: &GetProposalDataDto) {
     /*
      * Download HTML page from the given URL
      */
-    match download_html_page(url) {
+    match download_html_page(&dto.url) {
         Ok(_) => {
             send_message_to_console(
                 RunningStatus::Success,
@@ -26,7 +32,7 @@ pub fn get_proposal_data_controller(url: &str) {
      * Extract structured information from the downloaded HTML page
      */
     let write_proposal_result: Result<bool, String> =
-        build_structured_proposal_information(url.to_string());
+        build_structured_proposal_information(dto.url.to_string());
     match write_proposal_result {
         Ok(_) => {}
         Err(e) => {
@@ -102,6 +108,22 @@ pub fn get_proposal_data_controller(url: &str) {
             return;
         }
     };
+
+    if dto.output_og_image {
+        let file_copier = FileCopier::new(image_path.to_str().unwrap()).unwrap();
+        match file_copier.copy() {
+            Ok(_) => {
+                send_message_to_console(
+                    RunningStatus::Success,
+                    "OG Image has been successfully copied to current directory.",
+                );
+            }
+            Err(e) => {
+                send_message_to_console(RunningStatus::Failed, e.to_string().as_str());
+                return;
+            }
+        }
+    }
 
     /*
      * Show how to get the downloaded image for users
