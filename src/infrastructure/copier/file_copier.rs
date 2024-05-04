@@ -2,7 +2,7 @@ use std::io;
 use std::path::{Path, PathBuf};
 use std::{env, fs};
 
-struct FileCopier {
+pub(crate) struct FileCopier {
     src: PathBuf,
     dest: PathBuf,
 }
@@ -23,7 +23,7 @@ impl FileCopier {
     /// with the same filename as the source file
     /// src: "path/to/your/source/image.png"
     /// dest: "path/to/current_dir/image.png"
-    fn new(src: &str) -> io::Result<Self> {
+    pub(crate) fn new(src: &str) -> io::Result<Self> {
         let src_path: PathBuf = PathBuf::from(src);
         if !src_path.exists() {
             return Err(io::Error::new(
@@ -66,7 +66,7 @@ impl FileCopier {
     /// # Example
     /// src: "path/to/your/source/image.png"
     /// dest: "path/to/current_dir/image.png"
-    fn copy(&self) -> io::Result<()> {
+    pub(crate) fn copy(&self) -> io::Result<()> {
         fs::copy(&self.src, &self.dest)?;
         Ok(())
     }

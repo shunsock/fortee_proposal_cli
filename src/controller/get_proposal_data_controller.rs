@@ -1,4 +1,5 @@
 use crate::domain::proposal::proposal_json::ProposalJson;
+use crate::infrastructure::copier::file_copier::FileCopier;
 use crate::presentation::send_message::send_message_to_console;
 use crate::presentation::send_message::RunningStatus;
 use crate::use_case::build_proposal_json_file_from_html::build_structured_proposal_information;
@@ -108,7 +109,21 @@ pub fn get_proposal_data_controller(dto: &GetProposalDataDto) {
         }
     };
 
-    // TODO: Implement output og image to current directory
+    if dto.output_og_image {
+        let file_copier = FileCopier::new(image_path.to_str().unwrap()).unwrap();
+        match file_copier.copy() {
+            Ok(_) => {
+                send_message_to_console(
+                    RunningStatus::Success,
+                    "OG Image has been successfully copied to current directory.",
+                );
+            }
+            Err(e) => {
+                send_message_to_console(RunningStatus::Failed, e.to_string().as_str());
+                return;
+            }
+        }
+    }
 
     /*
      * Show how to get the downloaded image for users
